@@ -1,4 +1,4 @@
-// file: findServer.mjs
+// file: findServer.js
 // description: This module contains the code which has the findServer() function
 // Date Last Modified: 2021/05/13
 // Programmer: Daniel Grew
@@ -7,7 +7,7 @@
 const http = require("http");
 
 // retrieve constants from constants file
-  import { REQ_TIMEOUT } from '../../config/constants';
+  const { REQ_TIMEOUT, REQ_PORT } = require('../../config/constants');
 
 // function: findServer()
 // Parameters: server_list : [{ url, priority }]
@@ -18,24 +18,25 @@ const http = require("http");
 function findServer(server_list) {
     return new Promise((resolve, reject) => {
         // create list of promises to call an http server
-        let promises = [];
+        // let promises = [];
 
         // loop through server list to create promises for each server details object
-        for(info of server_list) {
-            // add the promise to the list
-            promises.push(checkServer(info, REQ_TIMEOUT));
-        }
+        // for(info of server_list) {
+        //     // add the promise to the list
+        //     promises.push(checkServer(info, REQ_TIMEOUT));
+        // }
 
         // wait for all of the promises to finish running
-        Promise.all(promises, (results) => {
-            if(results.length() < 1){
-                reject(new Error("None of the servers are online"));
-            }
+        Promise.all(server_list.map(server =>  { return checkServer(server, REQ_TIMEOUT) })).then( results => {
             
             // used to hold the server with the lowest priority
             let ret_server = null;
 
             for(result of results){
+                // check if the result is null
+                if(!result){
+                    continue;
+                }
                 // check if ret_server is null
                 if(!ret_server)
                 {
@@ -50,8 +51,14 @@ function findServer(server_list) {
                     }
                 }
             }
-            // resolve with the ret_server value - this should hold the server info of the server with the lowest priority
-            resolve(ret_server);
+            if(!ret_server)
+            {
+                reject(new Error("None of the servers are online"));
+            }
+            else{
+                // resolve with the ret_server value - this should hold the server info of the server with the lowest priority
+                resolve(ret_server);
+            }
         })
     });
 }
@@ -73,22 +80,23 @@ function checkServer(server_details, timeout) {
             timeout: timeout
         }
         // make an http request 
-        http.get(options, (res) => {
+        http.get(server_details.url, (res) => {
             // retrieve the status code from the request
             const statusCode = res.statusCode;
+            // check if the status code falls within response range indicating that the server is online
+            if(statusCode >= 200 || statusCode < 300){
+                // resolve with the server details
+                resolve(server_details)
+            }
+            else{
+                // resolve with null
+                resolve(null);
+            }
 
-            // set a listener to listen for the end of the response 
-            res.on('end', () => {
-                // check if the status code falls within response range indicating that the server is online
-                if(statusCode >= 200 || statusCode < 300){
-                    // resolve with the server details
-                    resolve(server_details)
-                }
-                else{
-                    // resolve with null
-                    resolve(null);
-                }
-            });
+        }).on('error', (err) => {
+            resolve(null);
         })
     })
 }
+
+module.exports = findServer;

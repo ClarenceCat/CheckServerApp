@@ -5,7 +5,9 @@
 
 // request timeout - used when making request to server
 const REQ_TIMEOUT = 5000;
+const REQ_PORT = 8080;
 
 module.exports = {
-    REQ_TIMEOUT
+    REQ_TIMEOUT,
+    REQ_PORT
 }
