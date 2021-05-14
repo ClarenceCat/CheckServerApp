@@ -59,6 +59,9 @@ function findServer(server_list) {
                 // resolve with the ret_server value - this should hold the server info of the server with the lowest priority
                 resolve(ret_server);
             }
+        }).catch((err) => {
+            // if any of the objects in the server list contains incorrect information
+            reject(new Error(err));
         })
     });
 }
@@ -76,11 +79,11 @@ function checkServer(server_details, timeout) {
 
         // create options to pass to request
         const options = {
-            host: server_details.url,
             timeout: timeout
         }
+
         // make an http request 
-        http.get(server_details.url, (res) => {
+        http.get(server_details.url, options, (res) => {
             // retrieve the status code from the request
             const statusCode = res.statusCode;
             // check if the status code falls within response range indicating that the server is online
@@ -93,7 +96,8 @@ function checkServer(server_details, timeout) {
                 resolve(null);
             }
 
-        }).on('error', (err) => {
+        })
+        .on('error', (err) => {
             resolve(null);
         })
     })

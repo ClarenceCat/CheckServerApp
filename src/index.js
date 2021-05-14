@@ -81,9 +81,32 @@ const test = [
     }
   ];
 
+  test5 = [];
+
+  test6 = [
+    {
+      "usrl": "http://doesNotExist.boldtech.co",
+      "priority": 1
+    },
+    {
+      "url": "http://boldtech.co",
+      "priority": 4
+    },
+    {
+      "url": "http://offline.boldtech.co",
+      "priority": 2
+    },
+    {
+      "url": "http://google.com",
+      "priority": 4
+    }
+  ];
+
   findServer(test).then(result => console.log(result)).catch(err => console.log(err))
   findServer(test2).then(result => console.log(result)).catch(err => console.log(err))
   findServer(test3).then(result => console.log(result)).catch(err => console.log(err))
   findServer(test4).then(result => console.log(result)).catch(err => console.log(err))
+  findServer(test5).then(result => console.log(result)).catch(err => console.log(err))
+  findServer(test6).then(result => console.log(result)).catch(err => console.log(err))
 
   
