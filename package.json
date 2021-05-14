@@ -1,0 +1,12 @@
+{
+  "name": "findserverapp",
+  "version": "1.0.0",
+  "description": "This app contains a module which attempts to find a server cof low priority which is considered online",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node src/index.js"
+  },
+  "author": "Daniel Grew",
+  "license": "ISC"
+}
