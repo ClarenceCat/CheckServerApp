@@ -1,10 +1,16 @@
-// File: index.js
-// Description: this is the main entry point of the application
-// Date Last Modified: 2021/05/13
+// file: findServerTests.js
+// description: This file contains all of the tests for the findServer module
+// Date Last Modified: 2021/05/16
 // Programmer: Daniel Grew
 
-const { findServer } = require('./modules/findServer');
+const { expect } = require('chai');
+const chai = require('chai');
+const { findServer, checkServer } = require('../src/modules/findServer');
 
+// we are going to use should declarations
+chai.should();
+
+// define test lists to use 
 const test = [
     {
       "url": "http://doesNotExist.boldtech.co",
@@ -102,11 +108,24 @@ const test = [
     }
   ];
 
-  findServer(test).then(result => console.log(result)).catch(err => console.log(err))
-  findServer(test2).then(result => console.log(result)).catch(err => console.log(err))
-  findServer(test3).then(result => console.log(result)).catch(err => console.log(err))
-  findServer(test4).then(result => console.log(result)).catch(err => console.log(err))
-  findServer(test5).then(result => console.log(result)).catch(err => console.log(err))
-  findServer(test6).then(result => console.log(result)).catch(err => console.log(err))
+// test the checkServer function
+describe('Test checkServer()', () => {
+    // TEST 1 
+    // Function: checkServer()
+    // Description: This test will test the happy path for a server that exists 
+    // Expected return: the server's details
+    describe('Test 1 - checkServer() with Online server', () => {
+        const test_online =     {
+            "url": "http://google.com",
+            "priority": 4
+          }
 
-  
+          it('Should check if google.com is online and return the object that was passed in', (done) => {
+              checkServer(test_online).then(res => {
+                expect(res).to.be.an('object').eq(test_online);
+                done();
+              }).catch(done)
+          })
+    })
+    
+})

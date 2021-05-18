@@ -103,4 +103,7 @@ function checkServer(server_details, timeout) {
     })
 }
 
-module.exports = findServer;
+module.exports = {
+    findServer,
+    checkServer
+};

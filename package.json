@@ -8,5 +8,9 @@
     "start": "node src/index.js"
   },
   "author": "Daniel Grew",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0"
+  }
 }
