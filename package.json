@@ -4,7 +4,7 @@
   "description": "This app contains a module which attempts to find a server cof low priority which is considered online",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "mocha",
     "start": "node src/index.js"
   },
   "author": "Daniel Grew",
